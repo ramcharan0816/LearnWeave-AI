@@ -1,4 +1,4 @@
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore[import-not-found]
 from datetime import datetime, timezone
 from fastapi import FastAPI  # type: ignore[import-not-found]
 
