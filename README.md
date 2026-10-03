@@ -1,5 +1,5 @@
 # LearnWeave-AI
-# LearnWeave AI
+
 
 ### Adaptive AI-Powered Personalized Learning Platform
 
