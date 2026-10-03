@@ -47,9 +47,10 @@ export default function Home() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(
-          "http://127.0.0.1:8000/api/v1/dashboard/overview"
+       const response = await fetch(
+  "http://127.0.0.1:8000/api/v1/dashboard/overview?student_id=5"
         );
+        
 
         if (!response.ok) {
           throw new Error(
