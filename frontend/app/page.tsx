@@ -1,417 +1,438 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-type LearningCourse = {
-  title: string;
-  category: string;
-  progress: number;
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
+type Source = {
+  filename?: string;
+  page_number?: number;
+  chunk_index?: number;
+  content?: string;
+  similarity_score?: number;
 };
-
-type DashboardData = {
-  student_name: string;
-  learning_hours: number;
-  topics_studied: number;
-  current_streak_days: number;
-  average_mastery: number;
-  courses: LearningCourse[];
-  upcoming_revision: string[];
-};
-
-const navigation = [
-  { icon: "⌂", label: "Dashboard", active: true },
-  { icon: "▤", label: "My Learning", active: false },
-  { icon: "✧", label: "AI Tutor", active: false },
-  { icon: "◎", label: "Knowledge Map", active: false },
-  { icon: "▣", label: "Assessments", active: false },
-];
-
-const courseColors = [
-  "bg-violet-500",
-  "bg-blue-500",
-  "bg-emerald-500",
-  "bg-amber-500",
-];
 
 export default function Home() {
-  const [dashboardData, setDashboardData] =
-    useState<DashboardData | null>(null);
-
-  const [loading, setLoading] = useState(true);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [sources, setSources] = useState<Source[]>([]);
+  const [asking, setAsking] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        setLoading(true);
-        setError("");
+  async function uploadDocument() {
+    if (!file) {
+      setUploadMessage("Please select a PDF file first.");
+      return;
+    }
 
-       const response = await fetch(
-  "http://127.0.0.1:8000/api/v1/dashboard/overview?student_id=5"
-        );
-        
+    setUploading(true);
+    setError("");
+    setUploadMessage("");
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to load dashboard (HTTP ${response.status})`
-          );
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(
+        `${API_URL}/api/v1/documents/upload`,
+        {
+          method: "POST",
+          body: formData,
         }
+      );
 
-        const data: DashboardData = await response.json();
-        setDashboardData(data);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Unable to connect to the backend"
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || `Upload failed (${response.status})`
         );
-      } finally {
-        setLoading(false);
       }
-    };
 
-    fetchDashboard();
-  }, []);
+      setUploaded(true);
+      setUploadMessage(
+        data.message ||
+          `${file.name} uploaded successfully. You can now ask questions.`
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to upload the document."
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
 
-  const stats = [
-    {
-      label: "Learning Hours",
-      value: dashboardData
-        ? dashboardData.learning_hours
-        : "—",
-      note: "This month",
-      icon: "◷",
-    },
-    {
-      label: "Topics Studied",
-      value: dashboardData
-        ? dashboardData.topics_studied
-        : "—",
-      note: "Across all subjects",
-      icon: "▤",
-    },
-    {
-      label: "Current Streak",
-      value: dashboardData
-        ? `${dashboardData.current_streak_days} days`
-        : "—",
-      note: "Keep it going!",
-      icon: "⚡",
-    },
-    {
-      label: "Average Mastery",
-      value: dashboardData
-        ? `${dashboardData.average_mastery}%`
-        : "—",
-      note: "Based on your progress",
-      icon: "◎",
-    },
-  ];
+  async function askQuestion(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!question.trim()) return;
+
+    setAsking(true);
+    setError("");
+    setAnswer("");
+    setSources([]);
+
+    try {
+      const response = await fetch(`${API_URL}/api/v1/rag/ask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question.trim(),
+          top_k: 3,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || `Question failed (${response.status})`
+        );
+      }
+
+      setAnswer(data.answer || "The API returned no answer.");
+      setSources(Array.isArray(data.sources) ? data.sources : []);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to generate an answer."
+      );
+    } finally {
+      setAsking(false);
+    }
+  }
 
   return (
-    <main className="min-h-screen bg-[#f7f8fc] text-slate-800 md:flex">
-      {/* Sidebar */}
-      <aside className="flex w-full flex-col border-r border-slate-200 bg-white p-5 md:min-h-screen md:w-64">
-        <div className="mb-8 flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 text-xl font-bold text-white">
-            L
+    <div className="min-h-screen bg-[#f7f8fc] text-slate-800">
+      <div className="flex min-h-screen">
+        <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white p-5 md:flex">
+          <div className="mb-10 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-xl font-bold text-white">
+              L
+            </div>
+            <div>
+              <h1 className="text-lg font-bold tracking-tight">
+                LearnWeave
+              </h1>
+              <p className="text-xs text-slate-500">AI Learning Space</p>
+            </div>
           </div>
 
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">
-              LearnWeave
-            </h1>
-            <p className="text-xs text-slate-500">
-              AI Learning Platform
-            </p>
-          </div>
-        </div>
-
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          Workspace
-        </p>
-
-        <nav className="flex gap-2 overflow-x-auto md:flex-col">
-          {navigation.map((item) => (
-            <a
-              key={item.label}
-              href="#"
-              className={`flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                item.active
-                  ? "bg-violet-50 text-violet-700"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-              }`}
-            >
-              <span className="text-lg">{item.icon}</span>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="mt-auto hidden rounded-2xl bg-violet-50 p-4 md:block">
-          <div className="mb-2 text-2xl">✦</div>
-          <h3 className="font-semibold text-slate-800">
-            Keep learning!
-          </h3>
-          <p className="mt-1 text-xs leading-5 text-slate-500">
-            Small steps every day lead to big achievements.
+          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Workspace
           </p>
-        </div>
-
-        <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 font-bold text-violet-700">
-            RC
+          <div className="flex items-center gap-3 rounded-xl bg-indigo-50 px-3 py-3 font-medium text-indigo-700">
+            <span>⌂</span>
+            <span>Study assistant</span>
           </div>
 
-          <div>
-            <p className="text-sm font-semibold">
-              {dashboardData?.student_name ?? "Student"}
-            </p>
-            <p className="text-xs text-slate-500">
-              Personal workspace
-            </p>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Dashboard */}
-      <section className="min-w-0 flex-1 p-5 sm:p-8 lg:p-10">
-        {/* Header */}
-        <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-sm text-slate-500">
-              Your personal learning space
-            </p>
-
-            <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
-              Welcome back, {dashboardData?.student_name ?? "Ram"}!
-            </h2>
-
-            <p className="mt-2 text-sm text-slate-500">
-              Continue your learning journey and achieve your goals.
-            </p>
+          <div className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-slate-600">
+            <span>▤</span>
+            <span>My documents</span>
           </div>
 
-          <button
-            type="button"
-            className="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
-          >
-            + New Learning Goal
-          </button>
-        </header>
-
-        {/* Loading and Error States */}
-        {loading && (
-          <div className="mb-6 rounded-xl border border-violet-100 bg-violet-50 p-4 text-sm text-violet-700">
-            Loading your learning dashboard...
+          <div className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-slate-600">
+            <span>◷</span>
+            <span>Recent activity</span>
           </div>
-        )}
 
-        {error && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            <p className="font-semibold">
-              Unable to load dashboard data
-            </p>
-            <p className="mt-1">{error}</p>
-            <p className="mt-2">
-              Make sure your FastAPI backend is running and CORS
-              allows http://localhost:3000.
+          <div className="mt-auto rounded-2xl bg-slate-50 p-4">
+            <div className="mb-2 text-sm font-semibold">Your AI study space</div>
+            <p className="text-xs leading-5 text-slate-500">
+              Learn from your own materials with document-grounded AI answers.
             </p>
           </div>
-        )}
+        </aside>
 
-        {/* Statistics */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm text-slate-500">
-                  {stat.label}
+        <main className="min-w-0 flex-1">
+          <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-5 sm:px-8">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 font-bold text-white md:hidden">
+                L
+              </div>
+              <div>
+                <p className="text-sm font-semibold">Study assistant</p>
+                <p className="text-xs text-slate-500">
+                  Your personal AI learning companion
                 </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              AI workspace
+            </div>
+          </header>
 
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-xl text-violet-600">
-                  {stat.icon}
+          <div className="mx-auto max-w-5xl px-5 py-8 sm:px-8">
+            <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-600 p-7 text-white shadow-lg shadow-indigo-200 sm:p-10">
+              <p className="mb-3 text-sm font-medium text-indigo-100">
+                YOUR PERSONALIZED LEARNING SPACE
+              </p>
+              <h2 className="max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">
+                Turn your study materials into understanding.
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-6 text-indigo-100 sm:text-base">
+                Upload your notes, ask questions, and explore clear answers
+                grounded in your learning resources.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2 text-xs font-medium">
+                <span className="rounded-full bg-white/15 px-3 py-2">
+                  Document-based learning
+                </span>
+                <span className="rounded-full bg-white/15 px-3 py-2">
+                  AI-powered answers
+                </span>
+                <span className="rounded-full bg-white/15 px-3 py-2">
+                  Source references
                 </span>
               </div>
+            </section>
 
-              <p className="text-2xl font-bold">
-                {stat.value}
-              </p>
-
-              <p className="mt-1 text-xs text-slate-400">
-                {stat.note}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Learning and Sidebar Cards */}
-        <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-          {/* Continue Learning */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-6 flex items-center justify-between gap-3">
-              <div>
-                <h3 className="text-lg font-bold">
-                  Continue Learning
-                </h3>
-                <p className="mt-1 text-sm text-slate-500">
-                  Pick up where you left off
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="text-sm font-semibold text-violet-600"
-              >
-                View all
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {dashboardData?.courses.map((item, index) => (
-                <div key={item.title}>
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-semibold">
-                        {item.title}
-                      </p>
-                      <p className="mt-1 text-xs text-slate-500">
-                        {item.category}
-                      </p>
-                    </div>
-
-                    <span className="text-sm font-semibold">
-                      {item.progress}%
-                    </span>
+            <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div className="mb-5 flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold">Learning materials</h3>
+                    <p className="mt-1 text-sm text-slate-500">
+                      Upload a PDF to your study space.
+                    </p>
                   </div>
-
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                    <div
-                      className={`h-full rounded-full ${
-                        courseColors[index % courseColors.length]
-                      }`}
-                      style={{
-                        width: `${Math.min(
-                          100,
-                          Math.max(0, item.progress)
-                        )}%`,
-                      }}
-                    />
+                  <div className="rounded-xl bg-indigo-50 p-2.5 text-xl text-indigo-600">
+                    ▤
                   </div>
                 </div>
-              ))}
 
-              {!loading &&
-                !error &&
-                dashboardData?.courses.length === 0 && (
-                  <p className="text-sm text-slate-500">
-                    No courses available yet.
+                <label
+                  htmlFor="pdf-upload"
+                  className="flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-7 text-center transition hover:border-indigo-400 hover:bg-indigo-50/40"
+                >
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl text-indigo-600 shadow-sm">
+                    ↑
+                  </div>
+                  <span className="text-sm font-semibold">
+                    Choose a PDF to upload
+                  </span>
+                  <span className="mt-1 text-xs text-slate-500">
+                    Select a file from your device
+                  </span>
+                  <input
+                    id="pdf-upload"
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    className="hidden"
+                    onChange={(event) => {
+                      const selected = event.target.files?.[0] || null;
+                      setFile(selected);
+                      setUploaded(false);
+                      setUploadMessage("");
+                      setError("");
+                    }}
+                  />
+                </label>
+
+                {file && (
+                  <div className="mt-4 flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+                    <div className="rounded-lg bg-rose-50 px-3 py-2 text-xs font-bold text-rose-600">
+                      PDF
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">
+                        {file.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFile(null);
+                        setUploaded(false);
+                        setUploadMessage("");
+                      }}
+                      className="rounded-lg px-2 py-1 text-sm text-slate-500 hover:bg-slate-100"
+                      aria-label="Remove selected file"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={uploadDocument}
+                  disabled={!file || uploading}
+                  className="mt-4 w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                >
+                  {uploading ? "Uploading..." : "Upload document"}
+                </button>
+
+                {uploadMessage && (
+                  <p className="mt-3 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700">
+                    {uploadMessage}
                   </p>
                 )}
 
-              {loading && (
-                <p className="text-sm text-slate-400">
-                  Loading courses...
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Right Side Cards */}
-          <div className="space-y-6">
-            {/* AI Tutor */}
-            <div className="rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 p-6 text-white shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 text-2xl">
-                ✧
-              </div>
-
-              <p className="text-sm font-medium text-violet-100">
-                Your AI Learning Companion
-              </p>
-
-              <h3 className="mt-2 text-xl font-bold">
-                Need help understanding a topic?
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-violet-100">
-                Explore concepts, ask questions, and get
-                personalized explanations.
-              </p>
-
-              <button
-                type="button"
-                className="mt-5 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-violet-700 transition hover:bg-violet-50"
-              >
-                Explore AI Tutor →
-              </button>
-            </div>
-
-            {/* Upcoming Revision */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="text-lg font-bold">
-                Upcoming Revision
-              </h3>
-
-              <p className="mt-1 text-sm text-slate-500">
-                Topics to revisit
-              </p>
-
-              <div className="mt-5 space-y-4">
-                {dashboardData?.upcoming_revision.map(
-                  (topic, index) => (
-                    <div
-                      key={topic}
-                      className="flex items-center gap-3"
-                    >
-                      <div
-                        className={`flex h-11 w-11 items-center justify-center rounded-xl text-lg ${
-                          index % 2 === 0
-                            ? "bg-blue-50 text-blue-600"
-                            : "bg-emerald-50 text-emerald-600"
-                        }`}
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold">
-                          {topic}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          Suggested revision
-                        </p>
-                      </div>
-                    </div>
-                  )
+                {uploaded && (
+                  <p className="mt-3 text-xs text-slate-500">
+                    Your document has been submitted to the backend.
+                  </p>
                 )}
 
-                {!loading &&
-                  !error &&
-                  dashboardData?.upcoming_revision.length === 0 && (
-                    <p className="text-sm text-slate-500">
-                      No revisions scheduled.
+                <div className="mt-5 rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-500">
+                  Upload PDF files containing text-based study material.
+                  Your backend extracts and indexes the content for retrieval.
+                </div>
+              </section>
+
+              <section className="flex min-h-[480px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div className="mb-5 flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold">Ask your study assistant</h3>
+                    <p className="mt-1 text-sm text-slate-500">
+                      Ask a question about your learning material.
                     </p>
+                  </div>
+                  <div className="rounded-xl bg-violet-50 p-2.5 text-xl text-violet-600">
+                    ✧
+                  </div>
+                </div>
+
+                <div className="flex flex-1 flex-col rounded-2xl bg-slate-50 p-4">
+                  {!answer && !asking && (
+                    <div className="m-auto max-w-xs py-8 text-center">
+                      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl text-indigo-600 shadow-sm">
+                        ✧
+                      </div>
+                      <h4 className="font-semibold">What would you like to learn?</h4>
+                      <p className="mt-2 text-sm leading-6 text-slate-500">
+                        Ask a question and get an AI-generated answer with
+                        references to your documents.
+                      </p>
+                    </div>
                   )}
 
-                {loading && (
-                  <p className="text-sm text-slate-400">
-                    Loading revision topics...
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+                  {asking && (
+                    <div className="m-auto py-8 text-center">
+                      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
+                      <p className="text-sm font-medium text-slate-600">
+                        Finding information and generating your answer...
+                      </p>
+                    </div>
+                  )}
 
-        {/* Footer */}
-        <footer className="mt-8 text-center text-xs text-slate-400">
-          LearnWeave AI · Learn at your own pace
-        </footer>
-      </section>
-    </main>
+                  {answer && !asking && (
+                    <div className="space-y-4">
+                      <div className="rounded-xl bg-white p-4 shadow-sm">
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-indigo-600">
+                          AI answer
+                        </p>
+                        <p className="whitespace-pre-wrap text-sm leading-7 text-slate-700">
+                          {answer}
+                        </p>
+                      </div>
+
+                      {sources.length > 0 && (
+                        <div>
+                          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            Sources ({sources.length})
+                          </h4>
+                          <div className="space-y-2">
+                            {sources.map((source, index) => (
+                              <div
+                                key={`${source.filename || "source"}-${source.page_number || index}-${index}`}
+                                className="rounded-xl border border-slate-200 bg-white p-3"
+                              >
+                                <p className="text-sm font-medium text-slate-700">
+                                  {source.filename || `Source ${index + 1}`}
+                                </p>
+                                <p className="mt-1 text-xs text-slate-500">
+                                  {source.page_number
+                                    ? `Page ${source.page_number}`
+                                    : "Document reference"}
+                                  {typeof source.similarity_score === "number"
+                                    ? ` · Similarity ${(source.similarity_score * 100).toFixed(1)}%`
+                                    : ""}
+                                </p>
+                                {source.content && (
+                                  <p className="mt-2 line-clamp-4 text-xs leading-5 text-slate-500">
+                                    {source.content}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <form onSubmit={askQuestion} className="mt-4">
+                  <label htmlFor="question" className="sr-only">
+                    Ask a question
+                  </label>
+                  <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-white p-2 focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100">
+                    <textarea
+                      id="question"
+                      value={question}
+                      onChange={(event) => setQuestion(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (
+                          event.key === "Enter" &&
+                          !event.shiftKey
+                        ) {
+                          event.preventDefault();
+                          event.currentTarget.form?.requestSubmit();
+                        }
+                      }}
+                      placeholder="Ask something about your study material..."
+                      rows={2}
+                      className="max-h-32 min-h-12 flex-1 resize-y bg-transparent px-2 py-2 text-sm outline-none placeholder:text-slate-400"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!question.trim() || asking}
+                      className="rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                    >
+                      {asking ? "..." : "Ask ↗"}
+                    </button>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-400">
+                    Press Enter to ask · Shift + Enter for a new line
+                  </p>
+                </form>
+              </section>
+            </div>
+
+            {error && (
+              <div
+                role="alert"
+                className="mt-6 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
+              >
+                <strong className="mr-1">Something went wrong:</strong>
+                {error}
+              </div>
+            )}
+
+            <footer className="py-8 text-center text-xs text-slate-400">
+              LearnWeave AI · Learn at your own pace
+            </footer>
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }
