@@ -1,4 +1,3 @@
-
 from datetime import datetime, timezone
 
 from sqlalchemy import (
@@ -7,6 +6,7 @@ from sqlalchemy import (
     Float,
     ForeignKey,
     Integer,
+    JSON,
     String,
     Text,
     UniqueConstraint,
@@ -22,6 +22,7 @@ class Student(Base):
     id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String(100), nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
+
     created_at = Column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
@@ -42,6 +43,7 @@ class Course(Base):
     title = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
     category = Column(String(100), nullable=False)
+
     created_at = Column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
@@ -107,4 +109,48 @@ class LearningProgress(Base):
     course = relationship(
         "Course",
         back_populates="learning_progress",
+    )
+
+
+class DocumentChunk(Base):
+    __tablename__ = "document_chunks"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    filename = Column(
+        String(255),
+        nullable=False,
+        index=True,
+    )
+
+    page_number = Column(
+        Integer,
+        nullable=False,
+    )
+
+    chunk_index = Column(
+        Integer,
+        nullable=False,
+    )
+
+    content = Column(
+        Text,
+        nullable=False,
+    )
+
+    embedding = Column(
+        JSON,
+        nullable=False,
+    )
+
+    embedding_model = Column(
+        String(100),
+        default="all-MiniLM-L6-v2",
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )

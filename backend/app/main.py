@@ -1,5 +1,6 @@
 from app.routers.documents import router as documents_router
 from datetime import datetime, timezone
+from app.routers.retrieval import router as retrieval_router
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +19,7 @@ app = FastAPI(
     version="1.0.0",
 )
 app.include_router(documents_router)
+app.include_router(retrieval_router)
 
 app.add_middleware(
     CORSMiddleware,
