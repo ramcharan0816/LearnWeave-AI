@@ -1,5 +1,5 @@
 from io import BytesIO
-
+from sqlalchemy import func
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from pypdf import PdfReader
 from pypdf.errors import PdfReadError
@@ -63,7 +63,51 @@ async def documents_health():
         "module": "PDF Document Processing",
     }
 
+@router.get("/")
+def list_documents():
+    db = SessionLocal()
 
+    try:
+        documents = (
+            db.query(
+                DocumentChunk.filename.label("filename"),
+                func.count(DocumentChunk.id).label("total_chunks"),
+                func.max(DocumentChunk.page_number).label("total_pages"),
+                func.max(DocumentChunk.created_at).label("uploaded_at"),
+            )
+            .group_by(DocumentChunk.filename)
+            .order_by(func.max(DocumentChunk.created_at).desc())
+            .all()
+        )
+
+        return {
+            "success": True,
+            "total_documents": len(documents),
+            "documents": [
+                {
+                    "filename": document.filename,
+                    "total_chunks": document.total_chunks,
+                    "total_pages": document.total_pages,
+                    "uploaded_at": (
+                        document.uploaded_at.isoformat()
+                        if document.uploaded_at
+                        else None
+                    ),
+                }
+                for document in documents
+            ],
+        }
+
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to retrieve the document library.",
+        )
+
+    finally:
+        db.close()
+        
 @router.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
     """

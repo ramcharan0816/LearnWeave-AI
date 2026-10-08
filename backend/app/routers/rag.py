@@ -35,6 +35,11 @@ class RAGRequest(BaseModel):
         le=10,
         description="Number of relevant chunks to retrieve"
     )
+    filename: str | None = Field(
+    default=None,
+    description="Optional filename to restrict the search"
+)
+    
 
 
 @router.post("/ask")
@@ -49,11 +54,14 @@ def ask_question(request: RAGRequest) -> dict[str, Any]:
                 detail="GROQ_API_KEY is not configured."
             )
 
+        db = Session(bind=engine)
         question_embedding = generate_embedding(request.question)
-        db = Session(engine)
 
-        document_chunks = db.query(DocumentChunk).all()
+        document_query = db.query(DocumentChunk)
+        if request.filename:
+            document_query = document_query.filter(DocumentChunk.filename == request.filename)
 
+        document_chunks = document_query.all()
         if not document_chunks:
             return {
                 "question": request.question,
@@ -63,6 +71,7 @@ def ask_question(request: RAGRequest) -> dict[str, Any]:
 
         ranked_results = []
 
+       
         for chunk in document_chunks:
             stored_embedding = chunk.embedding
 
@@ -175,6 +184,7 @@ def ask_question(request: RAGRequest) -> dict[str, Any]:
     finally:
         if db is not None:
             db.close()
+
 
 
 @router.get("/health")

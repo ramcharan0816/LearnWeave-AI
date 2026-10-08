@@ -1,7 +1,7 @@
 
 "use client";
-
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -13,6 +13,14 @@ type Source = {
   content?: string;
   similarity_score?: number;
 };
+
+type Document = {
+  filename: string;
+  total_chunks: number;
+  total_pages: number;
+  uploaded_at: string | null;
+};
+
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -130,23 +138,33 @@ export default function Home() {
             </div>
           </div>
 
-          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Workspace
-          </p>
-          <div className="flex items-center gap-3 rounded-xl bg-indigo-50 px-3 py-3 font-medium text-indigo-700">
-            <span>⌂</span>
-            <span>Study assistant</span>
-          </div>
+         <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+  Workspace
+</p>
 
-          <div className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-slate-600">
-            <span>▤</span>
-            <span>My documents</span>
-          </div>
+<Link
+  href="/"
+  className="flex items-center gap-3 rounded-xl bg-indigo-50 px-3 py-3 font-medium text-indigo-700"
+>
+  <span>⌂</span>
+  <span>Study assistant</span>
+</Link>
 
-          <div className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-slate-600">
-            <span>◷</span>
-            <span>Recent activity</span>
-          </div>
+<Link
+  href="/learning"
+  className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-indigo-600"
+>
+  <span>▤</span>
+  <span>My documents</span>
+</Link>
+
+<Link
+  href="/assessments"
+  className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-indigo-600"
+>
+  <span>◷</span>
+  <span>Recent activity</span>
+</Link>
 
           <div className="mt-auto rounded-2xl bg-slate-50 p-4">
             <div className="mb-2 text-sm font-semibold">Your AI study space</div>
