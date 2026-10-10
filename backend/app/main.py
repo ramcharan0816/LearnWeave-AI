@@ -1,8 +1,8 @@
-
+from app.routers import quiz
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import documents, retrieval, rag
+from app.routers import documents, retrieval, rag, auth
 
 app = FastAPI(
     title="LearnWeave AI",
@@ -29,7 +29,8 @@ app.add_middleware(
 app.include_router(documents.router)
 app.include_router(retrieval.router)
 app.include_router(rag.router)
-
+app.include_router(quiz.router)
+app.include_router(auth.router)
 
 @app.get("/")
 def root():

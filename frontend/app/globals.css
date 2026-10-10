@@ -1,26 +1,71 @@
 @import "tailwindcss";
-
+/* LearnWeave AI theme colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --lw-page: #f8f8fc;
+  --lw-surface: #ffffff;
+  --lw-text: #1e293b;
+  --lw-muted: #64748b;
+  --lw-border: #e2e8f0;
+  --lw-purple: #6d43d9;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  color-scheme: dark;
+  --lw-page: #11101a;
+  --lw-surface: #1b1927;
+  --lw-text: #f1effa;
+  --lw-muted: #aaa5bf;
+  --lw-border: #353146;
+  --lw-purple: #b8a2ff;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--lw-page);
+  color: var(--lw-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Theme switch button in the navigation */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--lw-border);
+  border-radius: 12px;
+  background: var(--lw-surface);
+  color: var(--lw-text);
+  font-size: 22px;
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--lw-purple);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--lw-purple);
+  outline-offset: 3px;
+}
+
+.theme-toggle:disabled {
+  cursor: default;
+}
+
+/* Reusable theme-aware surfaces */
+.theme-surface {
+  background: var(--lw-surface);
+  color: var(--lw-text);
+  border-color: var(--lw-border);
+}
+
+.theme-muted {
+  color: var(--lw-muted);
 }
