@@ -1,40 +1,40 @@
+
+from functools import lru_cache
+
+import numpy as np
 from sentence_transformers import SentenceTransformer
-EMBEDDING_DIMENSIONS = 384
-# Load the embedding model
-model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
-def generate_embedding(text: str) -> list[float]:
-    """
-    Convert text into a numerical embedding vector.
-    """
+MODEL_NAME = "all-MiniLM-L6-v2"
+
+
+@lru_cache(maxsize=1)
+def get_embedding_model() -> SentenceTransformer:
+    """Load and cache the model on its first use."""
+    return SentenceTransformer(MODEL_NAME)
+
+
+def generate_embeddings(texts: list[str]) -> np.ndarray:
+    """Generate embeddings for multiple text chunks."""
+    if not texts:
+        return np.empty((0, 384), dtype=np.float32)
+
+    model = get_embedding_model()
+    return model.encode(
+        texts,
+        convert_to_numpy=True,
+        show_progress_bar=False,
+    )
+
+
+def generate_embedding(text: str) -> np.ndarray:
+    """Generate an embedding for a single text."""
     if not text or not text.strip():
         raise ValueError("Text cannot be empty.")
 
-    embedding = model.encode(
+    model = get_embedding_model()
+    return model.encode(
         text,
         convert_to_numpy=True,
-        normalize_embeddings=True
+        show_progress_bar=False,
     )
-
-    return embedding.tolist()
-
-
-def generate_embeddings(texts: list[str]) -> list[list[float]]:
-    """
-    Generate embeddings for multiple text chunks.
-    """
-    if not texts:
-        return []
-
-    if any(not text or not text.strip() for text in texts):
-        raise ValueError("All texts must be non-empty.")
-
-    embeddings = model.encode(
-        texts,
-        convert_to_numpy=True,
-        normalize_embeddings=True,
-        show_progress_bar=False
-    )
-
-    return embeddings.tolist()
