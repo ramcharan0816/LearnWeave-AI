@@ -6,7 +6,11 @@ from pypdf.errors import PdfReadError
 from sqlalchemy.orm import sessionmaker
 
 from app.database import engine
-from app.embeddings import generate_embeddings
+from app.embeddings import (
+    EMBEDDING_DIMENSION,
+    MODEL_NAME,
+    generate_embeddings,
+)
 from app.models import DocumentChunk
 
 
@@ -217,7 +221,8 @@ async def upload_pdf(file: UploadFile = File(...)):
                     chunk_index=chunk["chunk_id"],
                     content=chunk["text"],
                     embedding=embedding,
-                    embedding_model="all-MiniLM-L6-v2",
+                    embedding_model="gemini-embedding-001",
+                    embedding_dimensions=len(embedding),
                 )
             )
 
@@ -233,7 +238,7 @@ async def upload_pdf(file: UploadFile = File(...)):
             "chunks_saved": len(database_chunks),
             "chunk_size": 1000,
             "chunk_overlap": 150,
-            "embedding_model": "all-MiniLM-L6-v2",
+            "embedding_model": "gemini-embedding-001",
             "embedding_dimensions": 384,
             "chunks": all_chunks,
             "message": (
