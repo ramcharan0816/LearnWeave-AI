@@ -20,7 +20,9 @@ app = FastAPI(
 
 @app.on_event("startup")
 def create_database_tables():
+    print("Registered tables:", list(Base.metadata.tables.keys()))
     Base.metadata.create_all(bind=engine)
+    print("Database tables created or verified.")
 
 # CORS configuration. Extra origins (for example a Vercel preview URL)
 # can be added with a comma-separated CORS_ALLOW_ORIGINS variable.
