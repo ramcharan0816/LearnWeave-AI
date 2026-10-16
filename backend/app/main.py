@@ -6,6 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import documents, retrieval, rag, auth
 
+from app.database import Base, engine
+from app import models
+
 app = FastAPI(
     title="LearnWeave AI",
     description=(
@@ -15,6 +18,11 @@ app = FastAPI(
     ),
     version="1.0.0"
 )
+
+@app.on_event("startup")
+def create_database_tables():
+    Base.metadata.create_all(bind=engine)
+    
 
 # CORS configuration. Extra origins (for example a Vercel preview URL)
 # can be added with a comma-separated CORS_ALLOW_ORIGINS variable.
