@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 /* LearnWeave AI theme colors */
 :root {
   color-scheme: light;
@@ -69,3 +69,139 @@ body {
 .theme-muted {
   color: var(--lw-muted);
 }
+
+/* LEARNWEAVE_MARKDOWN_STYLES_START */
+.markdown-answer {
+  width: 100%;
+  min-width: 0;
+  color: inherit;
+  font-size: 0.96rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.markdown-answer > :first-child {
+  margin-top: 0;
+}
+
+.markdown-answer > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-answer h1,
+.markdown-answer h2,
+.markdown-answer h3,
+.markdown-answer h4 {
+  color: inherit;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  margin: 1.4em 0 0.6em;
+}
+
+.markdown-answer h1 { font-size: 1.65rem; }
+.markdown-answer h2 { font-size: 1.35rem; }
+.markdown-answer h3 { font-size: 1.12rem; }
+.markdown-answer h4 { font-size: 1rem; }
+
+.markdown-answer p {
+  margin: 0.75em 0;
+}
+
+.markdown-answer strong {
+  font-weight: 700;
+}
+
+.markdown-answer ul,
+.markdown-answer ol {
+  padding-left: 1.6rem;
+  margin: 0.7em 0 1em;
+}
+
+.markdown-answer li {
+  padding-left: 0.2rem;
+  margin: 0.3em 0;
+}
+
+.markdown-answer li > p {
+  margin: 0.25em 0;
+}
+
+.markdown-answer a {
+  color: #7c3aed;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.markdown-answer blockquote {
+  margin: 1rem 0;
+  padding: 0.7rem 1rem;
+  border-left: 3px solid #8b5cf6;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.markdown-answer pre {
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  color: #172033;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.markdown-answer code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+.markdown-answer :not(pre) > code {
+  padding: 0.15em 0.35em;
+  border-radius: 0.3rem;
+  background: rgba(148, 163, 184, 0.16);
+}
+
+.markdown-answer table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.92em;
+}
+
+.markdown-answer th,
+.markdown-answer td {
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #d8deea;
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown-answer th {
+  background: rgba(139, 92, 246, 0.1);
+  font-weight: 700;
+}
+
+.markdown-answer hr {
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  margin: 1.3rem 0;
+}
+
+.markdown-answer-empty {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .markdown-answer table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .markdown-answer th,
+  .markdown-answer td {
+    padding: 0.5rem;
+  }
+}
+/* LEARNWEAVE_MARKDOWN_STYLES_END */
