@@ -206,12 +206,11 @@ async def upload_pdf(file: UploadFile = File(...)):
         database_chunks = []
 
         for chunk, embedding in zip(all_chunks, embeddings):
-            if len(embedding) != 384:
+            if len(embedding) != EMBEDDING_DIMENSION:
                 raise ValueError(
                     "An embedding has an unexpected dimension."
                 )
 
-            chunk["embedding"] = embedding
             chunk["embedding_dimensions"] = len(embedding)
 
             database_chunks.append(
@@ -220,9 +219,8 @@ async def upload_pdf(file: UploadFile = File(...)):
                     page_number=chunk["page"],
                     chunk_index=chunk["chunk_id"],
                     content=chunk["text"],
-                    embedding=embedding,
-                    embedding_model="gemini-embedding-001",
-                    embedding_dimensions=len(embedding),
+                    embedding=embedding.tolist(),
+                    embedding_model=MODEL_NAME,
                 )
             )
 
@@ -238,8 +236,8 @@ async def upload_pdf(file: UploadFile = File(...)):
             "chunks_saved": len(database_chunks),
             "chunk_size": 1000,
             "chunk_overlap": 150,
-            "embedding_model": "gemini-embedding-001",
-            "embedding_dimensions": 384,
+            "embedding_model": MODEL_NAME,
+            "embedding_dimensions": EMBEDDING_DIMENSION,
             "chunks": all_chunks,
             "message": (
                 "PDF text extracted, chunked, embeddings generated, "

@@ -1,8 +1,7 @@
-
 import traceback
-from math import sqrt
 from typing import Any
 
+import numpy as np
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -37,23 +36,26 @@ def cosine_similarity(
     vector_a: list[float],
     vector_b: list[float]
 ) -> float:
-    if not vector_a or not vector_b:
+    # Accepts lists or numpy arrays (query embeddings are numpy arrays).
+    array_a = np.asarray(vector_a, dtype=np.float64)
+    array_b = np.asarray(vector_b, dtype=np.float64)
+
+    if array_a.size == 0 or array_b.size == 0:
         return 0.0
 
-    if len(vector_a) != len(vector_b):
+    if array_a.shape != array_b.shape:
         raise ValueError(
             f"Embedding dimensions do not match: "
-            f"{len(vector_a)} and {len(vector_b)}"
+            f"{array_a.size} and {array_b.size}"
         )
 
-    dot_product = sum(a * b for a, b in zip(vector_a, vector_b))
-    magnitude_a = sqrt(sum(a * a for a in vector_a))
-    magnitude_b = sqrt(sum(b * b for b in vector_b))
+    magnitude_a = np.linalg.norm(array_a)
+    magnitude_b = np.linalg.norm(array_b)
 
     if magnitude_a == 0 or magnitude_b == 0:
         return 0.0
 
-    return dot_product / (magnitude_a * magnitude_b)
+    return float(np.dot(array_a, array_b) / (magnitude_a * magnitude_b))
 
 
 @router.post("/search")

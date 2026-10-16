@@ -1,13 +1,11 @@
 import os
 
-from app.routers import quiz
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import documents, retrieval, rag, auth
-
 from app.database import Base, engine
 from app import models
+from app.routers import quiz, documents, retrieval, rag, auth
 
 app = FastAPI(
     title="LearnWeave AI",
@@ -16,13 +14,13 @@ app = FastAPI(
         "with document upload, semantic search, "
         "and RAG-based answer generation."
     ),
-    version="1.0.0"
+    version="1.0.0",
 )
+
 
 @app.on_event("startup")
 def create_database_tables():
     Base.metadata.create_all(bind=engine)
-    
 
 # CORS configuration. Extra origins (for example a Vercel preview URL)
 # can be added with a comma-separated CORS_ALLOW_ORIGINS variable.
