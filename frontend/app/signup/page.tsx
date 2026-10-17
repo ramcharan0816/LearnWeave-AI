@@ -8,59 +8,69 @@ import { useRouter } from "next/navigation";
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const router = useRouter();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+    setSuccess("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Password must contain at least 8 characters.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/v1/auth/signin`, {
+      const response = await fetch(`${API_URL}/api/v1/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
+          name: name.trim(),
           email: email.trim().toLowerCase(),
           password,
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
         throw new Error(
           typeof data.detail === "string"
             ? data.detail
-            : "Sign in failed. Please check your email and password."
+            : "Unable to create your account. Please try again."
         );
       }
 
-      if (!data.access_token || !data.student) {
-        throw new Error("The server returned an incomplete login response.");
-      }
+      setSuccess("Account created successfully. Redirecting to sign in...");
 
-      sessionStorage.setItem("learnweave_token", data.access_token);
-      sessionStorage.setItem(
-        "learnweave_student",
-        JSON.stringify(data.student)
-      );
-
-      router.push("/");
+      window.setTimeout(() => {
+        router.push("/signin");
+      }, 1200);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "Unable to connect to LearnWeave AI. Please try again."
+          : "Unable to connect to LearnWeave AI."
       );
     } finally {
       setLoading(false);
@@ -68,165 +78,174 @@ export default function SignInPage() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-950 placeholder:text-gray-400 outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-100";
+    "w-full rounded-xl border border-slate-600 bg-[#0b1020] px-4 py-3 text-sm text-white placeholder:text-slate-400 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-500/20";
+
+  const labelClass =
+    "mb-2 block text-sm font-semibold text-slate-200";
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f7f5ff] px-5 py-10">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-xl md:grid-cols-2">
-        <section className="hidden flex-col justify-between bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-900 p-10 text-white md:flex">
-          <Link href="/" className="text-2xl font-bold">
-            LearnWeave <span className="text-violet-200">AI</span>
-          </Link>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080b19] px-4 py-10 text-white sm:px-6">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-violet-700/20 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-40 -right-24 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl"
+      />
+
+      <section className="relative w-full max-w-md rounded-3xl border border-white/10 bg-[#111528] p-6 shadow-2xl shadow-black/30 sm:p-9">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-3 rounded-lg text-lg font-extrabold tracking-tight text-white transition hover:opacity-90"
+        >
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 text-2xl text-white shadow-lg shadow-violet-900/30">
+            ✦
+          </span>
+          <span>
+            LearnWeave{" "}
+            <span className="text-violet-400">AI</span>
+          </span>
+        </Link>
+
+        <div className="mt-8">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-violet-300">
+            Start your journey
+          </p>
+
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl">
+            Create your account
+          </h1>
+
+          <p className="mt-3 text-sm leading-7 text-slate-300">
+            Build better study habits, explore new concepts, and make your
+            learning journey more effective.
+          </p>
+        </div>
+
+        <form onSubmit={handleSignUp} className="mt-8 space-y-5">
+          <div>
+            <label htmlFor="name" className={labelClass}>
+              Full name
+            </label>
+            <input
+              id="name"
+              type="text"
+              autoComplete="name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+              className={inputClass}
+            />
+          </div>
 
           <div>
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-3xl">
-              ✦
-            </div>
-
-            <h1 className="text-4xl font-bold leading-tight">
-              Welcome
-              <br />
-              back, learner.
-            </h1>
-
-            <p className="mt-5 max-w-sm leading-7 text-violet-100">
-              Continue your learning journey with AI-powered study tools,
-              personalized learning resources, and progress tracking.
-            </p>
+            <label htmlFor="email" className={labelClass}>
+              Email address
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className={inputClass}
+            />
           </div>
 
-          <p className="text-sm text-violet-200">
-            Learn smarter. Grow further.
-          </p>
-        </section>
+          <div>
+            <label htmlFor="password" className={labelClass}>
+              Password
+            </label>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              minLength={8}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="At least 8 characters"
+              className={inputClass}
+            />
+          </div>
 
-        <section className="px-7 py-10 sm:px-12 sm:py-12">
-          <Link
-            href="/"
-            className="text-xl font-bold text-violet-700 md:hidden"
+          <div>
+            <label htmlFor="confirmPassword" className={labelClass}>
+              Confirm password
+            </label>
+            <input
+              id="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter your password"
+              className={inputClass}
+            />
+          </div>
+
+          <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-300">
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={(e) => setShowPassword(e.target.checked)}
+              className="h-4 w-4 accent-violet-500"
+            />
+            Show passwords
+          </label>
+
+          {error && (
+            <div
+              role="alert"
+              className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm leading-6 text-red-200"
+            >
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div
+              role="status"
+              className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm leading-6 text-emerald-200"
+            >
+              {success}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-violet-500 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-900/30 transition hover:from-violet-500 hover:to-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            LearnWeave AI
+            {loading ? "Creating account..." : "Create account"}
+          </button>
+        </form>
+
+        <div className="my-7 flex items-center gap-4">
+          <div className="h-px flex-1 bg-white/10" />
+          <span className="text-xs text-slate-400">Already learning with us?</span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
+
+        <p className="text-center text-sm text-slate-300">
+          Already have an account?{" "}
+          <Link
+            href="/signin"
+            className="font-bold text-violet-300 underline-offset-4 transition hover:text-violet-200 hover:underline"
+          >
+            Sign in
           </Link>
+        </p>
 
-          <div className="mt-6 md:mt-0">
-            <p className="text-sm font-semibold uppercase tracking-widest text-violet-600">
-              Welcome back
-            </p>
-
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to LearnWeave
-            </h2>
-
-            <p className="mt-3 text-sm leading-6 text-gray-500">
-              Enter your account details to continue learning.
-            </p>
-          </div>
-
-          <form onSubmit={handleSignIn} className="mt-7 space-y-5">
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-semibold text-gray-700"
-              >
-                Email address
-              </label>
-
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className={inputClass}
-              />
-            </div>
-
-            <div>
-              <div className="mb-2 flex items-center justify-between gap-3">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Password
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setError(
-                      "Password reset is not available yet. Please contact your administrator."
-                    )
-                  }
-                  className="text-xs font-semibold text-violet-700 hover:text-violet-900"
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className={`${inputClass} pr-20`}
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((previous) => !previous)}
-                  className="absolute inset-y-0 right-3 my-auto h-fit text-xs font-semibold text-violet-700 hover:text-violet-900"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <p
-                role="alert"
-                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-              >
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-xl bg-violet-700 px-4 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-200 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
-          </form>
-
-          <div className="my-7 flex items-center gap-4">
-            <div className="h-px flex-1 bg-gray-200" />
-            <span className="text-xs text-gray-400">NEW TO LEARNWEAVE?</span>
-            <div className="h-px flex-1 bg-gray-200" />
-          </div>
-
-          <p className="text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/signup"
-              className="font-semibold text-violet-700 hover:text-violet-900"
-            >
-              Create account
-            </Link>
-          </p>
-
-          <p className="mt-8 text-center text-xs leading-5 text-gray-400">
-            By signing in, you agree to use LearnWeave AI responsibly.
-          </p>
-        </section>
-      </div>
+        <p className="mt-6 text-center text-xs text-slate-500">
+          Learn at your own pace. One concept at a time.
+        </p>
+      </section>
     </main>
   );
 }

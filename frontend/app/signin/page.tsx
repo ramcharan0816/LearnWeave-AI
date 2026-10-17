@@ -107,28 +107,32 @@ export default function SignInPage() {
 
           <p className="text-sm text-violet-200">
             Learn smarter. Grow further.
-          </p>
+         
+</p>
         </section>
 
         <section className="px-7 py-10 sm:px-12 sm:py-12">
           <Link
             href="/"
-            className="text-xl font-bold text-violet-700 md:hidden"
+            className="text-xl font-extrabold tracking-tight text-violet-700 md:hidden"
           >
-            LearnWeave AI
+            LearnWeave <span className="text-indigo-600">AI</span>
           </Link>
 
           <div className="mt-6 md:mt-0">
-            <p className="text-sm font-semibold uppercase tracking-widest text-violet-600">
-              Welcome back
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to LearnWeave
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-gray-500">
-              Enter your account details to continue learning.
-            </p>
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-violet-800">
+  Welcome back
+</p>
+
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#241044] sm:text-4xl">
+  Sign in to LearnWeave
+</h2>
+
+            <p className="mt-3 max-w-md text-sm leading-6 text-slate-700">
+  Enter your account details to continue learning.
+</p>
           </div>
+
 
           <form onSubmit={handleSignIn} className="mt-7 space-y-5">
             <div>

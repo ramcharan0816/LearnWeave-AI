@@ -1,207 +1,146 @@
 ﻿@import "tailwindcss";
-/* LearnWeave AI theme colors */
-:root {
-  color-scheme: light;
-  --lw-page: #f8f8fc;
-  --lw-surface: #ffffff;
-  --lw-text: #1e293b;
-  --lw-muted: #64748b;
-  --lw-border: #e2e8f0;
-  --lw-purple: #6d43d9;
+
+@theme {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --color-brand-50: #f5f3ff;
+  --color-brand-100: #ede9fe;
+  --color-brand-200: #ddd6fe;
+  --color-brand-300: #c4b5fd;
+  --color-brand-400: #a78bfa;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6d28d9;
+  --color-brand-800: #5b21b6;
+  --color-brand-900: #4c1d95;
+
+  --color-background: #080b19;
+  --color-foreground: #f8fafc;
+  --color-muted: #cbd5e1;
+  --color-border: #293047;
+  --color-surface: #11172a;
+
+  --radius-card: 1.75rem;
+  --radius-control: 0.875rem;
 }
 
-html.dark {
+:root {
   color-scheme: dark;
-  --lw-page: #11101a;
-  --lw-surface: #1b1927;
-  --lw-text: #f1effa;
-  --lw-muted: #aaa5bf;
-  --lw-border: #353146;
-  --lw-purple: #b8a2ff;
+  --page-bg: #080b19;
+  --surface: #11172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: #293047;
+  --brand: #8b5cf6;
+  --brand-hover: #7c3aed;
+  --focus-ring: rgba(167, 139, 250, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: var(--lw-page);
-  color: var(--lw-text);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Theme switch button in the navigation */
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--lw-border);
-  border-radius: 12px;
-  background: var(--lw-surface);
-  color: var(--lw-text);
-  font-size: 22px;
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
   cursor: pointer;
-  transition: background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
 }
 
-.theme-toggle:hover {
-  border-color: var(--lw-purple);
-  transform: translateY(-1px);
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.theme-toggle:focus-visible {
-  outline: 3px solid var(--lw-purple);
-  outline-offset: 3px;
-}
-
-.theme-toggle:disabled {
-  cursor: default;
-}
-
-/* Reusable theme-aware surfaces */
-.theme-surface {
-  background: var(--lw-surface);
-  color: var(--lw-text);
-  border-color: var(--lw-border);
-}
-
-.theme-muted {
-  color: var(--lw-muted);
-}
-
-/* LEARNWEAVE_MARKDOWN_STYLES_START */
-.markdown-answer {
-  width: 100%;
-  min-width: 0;
+a {
   color: inherit;
-  font-size: 0.96rem;
-  line-height: 1.8;
-  overflow-wrap: anywhere;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.markdown-answer > :first-child {
-  margin-top: 0;
-}
-
-.markdown-answer > :last-child {
-  margin-bottom: 0;
-}
-
-.markdown-answer h1,
-.markdown-answer h2,
-.markdown-answer h3,
-.markdown-answer h4 {
-  color: inherit;
-  font-weight: 700;
-  line-height: 1.35;
-  letter-spacing: -0.02em;
-  margin: 1.4em 0 0.6em;
-}
-
-.markdown-answer h1 { font-size: 1.65rem; }
-.markdown-answer h2 { font-size: 1.35rem; }
-.markdown-answer h3 { font-size: 1.12rem; }
-.markdown-answer h4 { font-size: 1rem; }
-
-.markdown-answer p {
-  margin: 0.75em 0;
-}
-
-.markdown-answer strong {
-  font-weight: 700;
-}
-
-.markdown-answer ul,
-.markdown-answer ol {
-  padding-left: 1.6rem;
-  margin: 0.7em 0 1em;
-}
-
-.markdown-answer li {
-  padding-left: 0.2rem;
-  margin: 0.3em 0;
-}
-
-.markdown-answer li > p {
-  margin: 0.25em 0;
-}
-
-.markdown-answer a {
-  color: #7c3aed;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.markdown-answer blockquote {
-  margin: 1rem 0;
-  padding: 0.7rem 1rem;
-  border-left: 3px solid #8b5cf6;
-  border-radius: 0 0.5rem 0.5rem 0;
-  background: rgba(139, 92, 246, 0.08);
-}
-
-.markdown-answer pre {
-  padding: 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  background: #f8fafc;
-  color: #172033;
-  overflow-x: auto;
+img,
+svg,
+video,
+canvas {
+  display: block;
   max-width: 100%;
 }
-
-.markdown-answer code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.9em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
 }
 
-.markdown-answer :not(pre) > code {
-  padding: 0.15em 0.35em;
-  border-radius: 0.3rem;
-  background: rgba(148, 163, 184, 0.16);
+p {
+  color: var(--text-secondary);
+  line-height: 1.75;
 }
 
-.markdown-answer table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.92em;
+::selection {
+  background: #c4b5fd;
+  color: #1e1b4b;
 }
 
-.markdown-answer th,
-.markdown-answer td {
-  padding: 0.65rem 0.8rem;
-  border: 1px solid #d8deea;
-  text-align: left;
-  vertical-align: top;
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 4px;
 }
 
-.markdown-answer th {
-  background: rgba(139, 92, 246, 0.1);
-  font-weight: 700;
+input,
+textarea,
+select {
+  min-width: 0;
 }
 
-.markdown-answer hr {
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+hr {
+  height: 1px;
   border: 0;
-  border-top: 1px solid #e2e8f0;
-  margin: 1.3rem 0;
+  background: var(--border);
 }
 
-.markdown-answer-empty {
-  color: #64748b;
-  font-size: 0.95rem;
-}
-
-@media (max-width: 640px) {
-  .markdown-answer table {
-    display: block;
-    overflow-x: auto;
-  }
-
-  .markdown-answer th,
-  .markdown-answer td {
-    padding: 0.5rem;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
-/* LEARNWEAVE_MARKDOWN_STYLES_END */
