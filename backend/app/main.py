@@ -1,11 +1,12 @@
 import os
+from app.password_reset_model import PasswordResetOTP
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
 from app import models
-from app.routers import quiz, documents, retrieval, rag, auth
+from app.routers import quiz, documents, retrieval, rag, auth, password_reset
 
 app = FastAPI(
     title="LearnWeave AI",
@@ -49,6 +50,7 @@ app.include_router(retrieval.router)
 app.include_router(rag.router)
 app.include_router(quiz.router)
 app.include_router(auth.router)
+app.include_router(password_reset.router)
 
 @app.get("/")
 def root():

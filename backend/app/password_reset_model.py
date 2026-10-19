@@ -1,3 +1,4 @@
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.sql import func
 
@@ -14,9 +15,11 @@ class PasswordResetOTP(Base):
         nullable=False,
         index=True,
     )
-    otp_hash = Column(String(255), nullable=False)
+    otp_hash = Column(String(64), nullable=False)
     expires_at = Column(DateTime(timezone=True), nullable=False)
     attempts = Column(Integer, nullable=False, default=0)
+    reset_token_hash = Column(String(64), nullable=True)
+    verified_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
