@@ -53,7 +53,8 @@ export default function SignUpPage() {
 
       const data = await response.json().catch(() => ({}));
 
-      if (!response.ok) {
+     
+if (!response.ok) {
   const message = Array.isArray(data.detail)
     ? data.detail
         .map((item: { msg?: string; loc?: (string | number)[] }) =>
@@ -66,6 +67,7 @@ export default function SignUpPage() {
 
   throw new Error(message);
 }
+
 
       setSuccess("Account created successfully. Redirecting to sign in...");
 
