@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  process.env.NEXT_PUBLIC_API_URL || "https://learnweave-ai.onrender.com";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -44,22 +44,28 @@ export default function SignUpPage() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          password,
-        }),
+       body: JSON.stringify({
+  full_name: name.trim(),
+  email: email.trim().toLowerCase(),
+  password,
+}),
       });
 
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(
-          typeof data.detail === "string"
-            ? data.detail
-            : "Unable to create your account. Please try again."
-        );
-      }
+  const message = Array.isArray(data.detail)
+    ? data.detail
+        .map((item: { msg?: string; loc?: (string | number)[] }) =>
+          `${item.loc?.join(".") ?? "Field"}: ${item.msg ?? "Invalid input"}`
+        )
+        .join(", ")
+    : typeof data.detail === "string"
+      ? data.detail
+      : `Request failed (${response.status})`;
+
+  throw new Error(message);
+}
 
       setSuccess("Account created successfully. Redirecting to sign in...");
 
