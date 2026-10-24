@@ -92,7 +92,7 @@ export default function SignInPage() {
 
           <div>
             <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-3xl">
-              âœ¦
+              ✦
             </div>
             <h1 className="text-4xl font-bold leading-tight">
               Welcome
@@ -186,7 +186,7 @@ export default function SignInPage() {
             <div className="mt-2 flex justify-end">
   <Link
     href="/forgot-password"
-    className="text-sm font-semibold text-violet-700 transition hover:text-violet-900 hover:underline"
+   className="text-sm font-semibold text-purple-700 hover:text-purple-900 hover:underline"
   >
     Forgot password?
   </Link>
