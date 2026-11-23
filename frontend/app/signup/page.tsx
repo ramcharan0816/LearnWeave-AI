@@ -86,52 +86,64 @@ if (!response.ok) {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-slate-600 bg-[#0b1020] px-4 py-3 text-sm text-white placeholder:text-slate-400 outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20";
+    "w-full rounded-xl border border-[#deded2] bg-[#fffefa] px-4 py-3 text-sm font-medium text-[#1b3029] placeholder:text-[#969c8f] outline-none transition duration-200 focus:border-[#557e63] focus:ring-4 focus:ring-[#557e63]/10";
 
-  const labelClass =
-    "mb-2 block text-sm font-semibold text-slate-200";
+  const labelClass = "mb-2 block text-sm font-semibold text-[#34483b]";
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080b19] px-4 py-10 text-white sm:px-6">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-amber-700/20 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -right-24 h-96 w-96 rounded-full bg-teal-600/20 blur-3xl"
-      />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f0eee4] px-4 py-8 text-[#1b3029] sm:px-8 sm:py-12">
+      <div aria-hidden="true" className="pointer-events-none absolute -left-32 top-1/4 h-80 w-80 rounded-full bg-[#d6dfce]/70 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-[#f2d9b7]/60 blur-3xl" />
 
-      <section className="relative w-full max-w-md rounded-3xl border border-white/10 bg-[#111528] p-6 shadow-2xl shadow-black/30 sm:p-9">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-3 rounded-lg text-lg font-extrabold tracking-tight text-white transition hover:opacity-90"
-        >
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-amber-500 to-teal-600 text-2xl text-white shadow-lg shadow-amber-900/30">
-            ✦
-          </span>
-          <span>
-            LearnWeave{" "}
-            <span className="text-amber-400">AI</span>
-          </span>
-        </Link>
+      <div className="relative grid w-full max-w-6xl overflow-hidden rounded-[2rem] border border-[#d8d8cc] bg-[#fffdf7] shadow-[0_28px_80px_-36px_rgba(26,48,40,0.35)] md:min-h-[760px] md:grid-cols-[0.92fr_1.08fr]">
+        <section className="relative isolate flex min-h-[260px] flex-col justify-between overflow-hidden bg-[#173b32] p-7 text-white sm:p-10 md:min-h-full md:p-12 lg:p-14">
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_12%_15%,rgba(135,174,119,0.28),transparent_42%),radial-gradient(ellipse_at_90%_90%,rgba(209,166,101,0.20),transparent_38%)]" />
+          <div aria-hidden="true" className="absolute -right-28 top-16 -z-10 h-80 w-80 rounded-full border border-white/10 md:top-32 md:h-[28rem] md:w-[28rem]">
+            <div className="absolute inset-8 rounded-full border border-white/10" />
+            <div className="absolute inset-16 rounded-full border border-white/10" />
+            <div className="absolute inset-24 rounded-full border border-white/10" />
+          </div>
 
-        <div className="mt-8">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-amber-300">
-            Start your journey
-          </p>
+          <Link href="/" className="inline-flex w-fit items-center gap-3 rounded-xl focus-visible:outline-white">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#dce9c9] text-xl font-black text-[#173b32]">L<span className="sr-only">LearnWeave</span></span>
+            <span className="text-lg font-bold tracking-tight">LearnWeave <span className="font-medium text-[#c4d2aa]">AI</span></span>
+          </Link>
 
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl">
-            Create your account
-          </h1>
+          <div className="relative mt-8 max-w-lg md:mt-14">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[#dce9c9]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#d3a962]" /> A space made for you
+            </div>
+            <h1 className="max-w-md text-[2.6rem] font-semibold leading-[1.06] tracking-[-0.045em] sm:text-5xl lg:text-[3.65rem]">
+              Make room for
+              <br />
+              <span className="font-serif font-normal italic text-[#dce9c9]">what’s next.</span>
+            </h1>
+            <p className="mt-6 max-w-sm text-sm leading-7 text-[#d6e0d5] sm:text-base">
+              Bring your interests together, build a steady rhythm, and keep every new idea within reach.
+            </p>
 
-          <p className="mt-3 text-sm leading-7 text-slate-300">
-            Build better study habits, explore new concepts, and make your
-            learning journey more effective.
-          </p>
-        </div>
+            <div className="mt-8 space-y-4 border-t border-white/15 pt-6">
+              <p className="flex items-center gap-3 text-sm text-[#e4e9dd]"><span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-xs text-[#dce9c9]">01</span> Keep study materials organized</p>
+              <p className="flex items-center gap-3 text-sm text-[#e4e9dd]"><span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-xs text-[#dce9c9]">02</span> Explore subjects that interest you</p>
+              <p className="flex items-center gap-3 text-sm text-[#e4e9dd]"><span className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-xs text-[#dce9c9]">03</span> See your progress take shape</p>
+            </div>
+          </div>
 
-        <form onSubmit={handleSignUp} className="mt-8 space-y-5">
+          <p className="mt-8 text-xs tracking-wide text-[#b5c7b9]">Learn at your pace · Grow your way</p>
+        </section>
+
+        <section className="flex flex-col justify-center px-6 py-8 sm:px-10 sm:py-10 lg:px-16">
+          <Link href="/" className="mb-7 inline-flex w-fit items-center gap-2 text-base font-bold tracking-tight text-[#173b32] md:hidden">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#173b32] text-sm text-[#dce9c9]">L</span> LearnWeave <span className="font-medium text-[#74876c]">AI</span>
+          </Link>
+
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#74876c]">Start your journey</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-[#1b3029] sm:text-4xl">Create your account.</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-[#6c7569]">One thoughtful step toward learning that feels like yours.</p>
+          </div>
+
+          <form onSubmit={handleSignUp} className="mt-7 space-y-4">
           <div>
             <label htmlFor="name" className={labelClass}>
               Full name
@@ -197,12 +209,12 @@ if (!response.ok) {
             />
           </div>
 
-          <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-300">
+          <label className="flex cursor-pointer items-center gap-3 text-sm text-[#6c7569]">
             <input
               type="checkbox"
               checked={showPassword}
               onChange={(e) => setShowPassword(e.target.checked)}
-              className="h-4 w-4 accent-amber-500"
+              className="h-4 w-4 rounded border-[#bdc7b8] accent-[#315e49]"
             />
             Show passwords
           </label>
@@ -210,7 +222,7 @@ if (!response.ok) {
           {error && (
             <div
               role="alert"
-              className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm leading-6 text-red-200"
+              className="rounded-xl border border-[#e7c9bd] bg-[#fff5f0] px-4 py-3 text-sm leading-6 text-[#9c4937]"
             >
               {error}
             </div>
@@ -219,7 +231,7 @@ if (!response.ok) {
           {success && (
             <div
               role="status"
-              className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm leading-6 text-emerald-200"
+              className="rounded-xl border border-[#bbd1bb] bg-[#eff5ec] px-4 py-3 text-sm leading-6 text-[#315e49]"
             >
               {success}
             </div>
@@ -228,32 +240,16 @@ if (!response.ok) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-900/30 transition hover:from-amber-500 hover:to-teal-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+            className="group flex w-full items-center justify-center gap-3 rounded-xl bg-[#1d4939] px-4 py-3.5 text-sm font-bold text-white shadow-[0_8px_20px_-10px_rgba(23,59,50,0.7)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#173b32] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#789b77] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Creating account..." : "Create account"}
+            {loading ? "Creating your space…" : <>Create your account <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span></>}
           </button>
         </form>
 
-        <div className="my-7 flex items-center gap-4">
-          <div className="h-px flex-1 bg-white/10" />
-          <span className="text-xs text-slate-400">Already learning with us?</span>
-          <div className="h-px flex-1 bg-white/10" />
-        </div>
-
-        <p className="text-center text-sm text-slate-300">
-          Already have an account?{" "}
-          <Link
-            href="/signin"
-            className="font-bold text-amber-300 underline-offset-4 transition hover:text-amber-200 hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
-
-        <p className="mt-6 text-center text-xs text-slate-500">
-          Learn at your own pace. One concept at a time.
-        </p>
+        <p className="mt-6 text-sm text-[#6c7569]">Already have an account? <Link href="/signin" className="font-bold text-[#315e49] hover:text-[#173b32] hover:underline">Sign in</Link></p>
+        <p className="mt-5 text-xs leading-5 text-[#92978b]">Your learning space is ready when you are.</p>
       </section>
+      </div>
     </main>
   );
 }
