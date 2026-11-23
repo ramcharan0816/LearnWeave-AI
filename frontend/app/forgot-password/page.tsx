@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://learnweaveai.onrender.com";
@@ -37,6 +38,7 @@ async function readResponse(response: Response) {
 }
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [stage, setStage] = useState<Stage>("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -166,7 +168,7 @@ export default function ForgotPasswordPage() {
       setNewPassword("");
       setConfirmPassword("");
       window.setTimeout(() => {
-        window.location.assign("/signin");
+        router.push("/signin");
       }, 1200);
     } catch (err) {
       setError(

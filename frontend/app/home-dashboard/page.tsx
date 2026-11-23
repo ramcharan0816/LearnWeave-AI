@@ -67,6 +67,8 @@ export default function Home() {
         const fullName = student.name || student.full_name;
 
         if (fullName) {
+          // Profile data lives in browser storage and is only available after hydration.
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setName(fullName.trim().split(/\s+/)[0]);
         } else if (student.email) {
           setName(student.email.split("@")[0]);

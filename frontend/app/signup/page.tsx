@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://learnweave-ai.onrender.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://learnweaveai.onrender.com";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -86,7 +86,7 @@ if (!response.ok) {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-slate-600 bg-[#0b1020] px-4 py-3 text-sm text-white placeholder:text-slate-400 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-500/20";
+    "w-full rounded-xl border border-slate-600 bg-[#0b1020] px-4 py-3 text-sm text-white placeholder:text-slate-400 outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-500/20";
 
   const labelClass =
     "mb-2 block text-sm font-semibold text-slate-200";
@@ -95,11 +95,11 @@ if (!response.ok) {
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080b19] px-4 py-10 text-white sm:px-6">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-violet-700/20 blur-3xl"
+        className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-amber-700/20 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -right-24 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl"
+        className="pointer-events-none absolute -bottom-40 -right-24 h-96 w-96 rounded-full bg-teal-600/20 blur-3xl"
       />
 
       <section className="relative w-full max-w-md rounded-3xl border border-white/10 bg-[#111528] p-6 shadow-2xl shadow-black/30 sm:p-9">
@@ -107,17 +107,17 @@ if (!response.ok) {
           href="/"
           className="inline-flex items-center gap-3 rounded-lg text-lg font-extrabold tracking-tight text-white transition hover:opacity-90"
         >
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 text-2xl text-white shadow-lg shadow-violet-900/30">
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-amber-500 to-teal-600 text-2xl text-white shadow-lg shadow-amber-900/30">
             ✦
           </span>
           <span>
             LearnWeave{" "}
-            <span className="text-violet-400">AI</span>
+            <span className="text-amber-400">AI</span>
           </span>
         </Link>
 
         <div className="mt-8">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-violet-300">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-amber-300">
             Start your journey
           </p>
 
@@ -202,7 +202,7 @@ if (!response.ok) {
               type="checkbox"
               checked={showPassword}
               onChange={(e) => setShowPassword(e.target.checked)}
-              className="h-4 w-4 accent-violet-500"
+              className="h-4 w-4 accent-amber-500"
             />
             Show passwords
           </label>
@@ -228,7 +228,7 @@ if (!response.ok) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-violet-500 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-900/30 transition hover:from-violet-500 hover:to-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-400 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-900/30 transition hover:from-amber-500 hover:to-teal-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Creating account..." : "Create account"}
           </button>
@@ -244,7 +244,7 @@ if (!response.ok) {
           Already have an account?{" "}
           <Link
             href="/signin"
-            className="font-bold text-violet-300 underline-offset-4 transition hover:text-violet-200 hover:underline"
+            className="font-bold text-amber-300 underline-offset-4 transition hover:text-amber-200 hover:underline"
           >
             Sign in
           </Link>

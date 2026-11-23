@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Course = {
   id: number;
@@ -27,7 +27,7 @@ const initialCourses: Course[] = [
     progress: 75,
     lessons: 20,
     completed: 15,
-    color: "violet",
+    color: "amber",
     icon: "🧠",
     level: "Intermediate",
   },
@@ -67,16 +67,45 @@ const navigation = [
   { label: "Assessments", href: "/assessments", icon: "⌁" },
 ];
 
+const learningInterests = ["Machine Learning", "Python", "Data Science", "Web Development", "Mathematics", "Biology"];
+
 export default function LearningPage() {
   const [courses] = useState<Course[]>(initialCourses);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [notice, setNotice] = useState("");
+  const [interests, setInterests] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("learnweave_interests") || "[]");
+      if (Array.isArray(saved)) {
+        // Restore browser preferences after hydration; localStorage is unavailable during SSR.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setInterests(saved.filter((item): item is string => typeof item === "string"));
+      }
+    } catch { /* Ignore malformed saved preferences. */ }
+  }, []);
+
+  function toggleInterest(interest: string) {
+    setInterests((current) => {
+      const next = current.includes(interest) ? current.filter((item) => item !== interest) : [...current, interest];
+      localStorage.setItem("learnweave_interests", JSON.stringify(next));
+      return next;
+    });
+  }
 
   const filteredCourses = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    return courses.filter((course) => {
+    const personalizedCourses = interests.length
+      ? [...courses].sort((a, b) => {
+          const matches = (course: Course) => interests.some((interest) => `${course.title} ${course.category} ${course.description}`.toLowerCase().includes(interest.toLowerCase()));
+          return Number(matches(b)) - Number(matches(a));
+        })
+      : courses;
+
+    return personalizedCourses.filter((course) => {
       const matchesSearch =
         course.title.toLowerCase().includes(query) ||
         course.category.toLowerCase().includes(query) ||
@@ -91,7 +120,7 @@ export default function LearningPage() {
 
       return matchesSearch && matchesFilter;
     });
-  }, [courses, search, filter]);
+  }, [courses, search, filter, interests]);
 
   const completedLessons = courses.reduce(
     (total, course) => total + course.completed,
@@ -113,12 +142,12 @@ export default function LearningPage() {
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-5 px-4 sm:px-6 lg:px-10">
           <Link href="/" className="flex shrink-0 items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-xl text-white shadow-lg shadow-violet-200">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-amber-600 to-teal-600 text-xl text-white shadow-lg shadow-amber-200">
               ✦
             </span>
             <span>
               <span className="block text-lg font-extrabold tracking-tight">
-                LearnWeave <span className="text-violet-600">AI</span>
+                LearnWeave <span className="text-amber-600">AI</span>
               </span>
               <span className="hidden text-[10px] tracking-[1.5px] text-slate-400 sm:block">
                 YOUR PERSONAL LEARNING SPACE
@@ -136,8 +165,8 @@ export default function LearningPage() {
                 }
                 className={`whitespace-nowrap rounded-xl px-3 py-3 text-sm font-semibold transition ${
                   item.label === "My Learning"
-                    ? "bg-violet-50 text-violet-700"
-                    : "text-slate-500 hover:bg-slate-50 hover:text-violet-700"
+                    ? "bg-amber-50 text-amber-700"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-amber-700"
                 }`}
               >
                 <span className="mr-2">{item.icon}</span>
@@ -151,7 +180,7 @@ export default function LearningPage() {
               <p className="text-sm font-bold">Ram Charan</p>
               <p className="text-xs text-slate-400">Student account</p>
             </div>
-            <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-violet-200 bg-violet-100 text-sm font-extrabold text-violet-700">
+            <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-amber-200 bg-amber-100 text-sm font-extrabold text-amber-700">
               RC
             </div>
           </div>
@@ -164,7 +193,7 @@ export default function LearningPage() {
               href={item.href}
               className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold ${
                 item.label === "My Learning"
-                  ? "bg-violet-100 text-violet-700"
+                  ? "bg-amber-100 text-amber-700"
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
@@ -177,12 +206,12 @@ export default function LearningPage() {
       <main className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <section className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-100 bg-white px-3 py-2 text-xs font-bold text-violet-700">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-100 bg-white px-3 py-2 text-xs font-bold text-amber-700">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               YOUR LEARNING WORKSPACE
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-              My Learning <span className="text-violet-600">✦</span>
+              My Learning <span className="text-amber-600">✦</span>
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500 sm:text-base">
               Continue your courses, track your progress, and build your
@@ -192,16 +221,27 @@ export default function LearningPage() {
 
           <Link
             href="/documents"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:bg-violet-700"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-amber-200 transition hover:-translate-y-0.5 hover:bg-amber-700"
           >
             + Study Materials
           </Link>
         </section>
 
+        <section aria-labelledby="interest-heading" className="mb-8 rounded-2xl border border-amber-100 bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+            <div>
+              <h2 id="interest-heading" className="font-extrabold">Shape your study feed</h2>
+              <p className="mt-1 text-sm text-slate-500">Choose subjects you enjoy. We’ll bring related courses and assessments forward.</p>
+            </div>
+            <Link href="/assessments" className="text-sm font-bold text-amber-800 hover:text-amber-950">Practice a subject →</Link>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">{learningInterests.map((interest) => <button key={interest} type="button" aria-pressed={interests.includes(interest)} onClick={() => toggleInterest(interest)} className={`rounded-full border px-4 py-2 text-xs font-bold transition ${interests.includes(interest) ? "border-amber-700 bg-amber-700 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-amber-400"}`}>{interest}</button>)}</div>
+        </section>
+
         {notice && (
           <div
             role="status"
-            className="mb-6 flex items-center justify-between gap-3 rounded-xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-800"
+            className="mb-6 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
           >
             <p>{notice}</p>
             <button
@@ -221,7 +261,7 @@ export default function LearningPage() {
               <span className="text-sm font-medium text-slate-500">
                 Enrolled courses
               </span>
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-violet-50 text-xl">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-amber-50 text-xl">
                 📚
               </span>
             </div>
@@ -263,25 +303,25 @@ export default function LearningPage() {
             <p className="mt-4 text-3xl font-extrabold">{averageProgress}%</p>
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
               <div
-                className="h-full rounded-full bg-violet-600 transition-all"
+                className="h-full rounded-full bg-amber-600 transition-all"
                 style={{ width: `${averageProgress}%` }}
               />
             </div>
           </div>
         </section>
 
-        <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#30206f] via-[#5137a7] to-[#7758df] p-6 text-white shadow-xl shadow-violet-200 sm:p-9">
+        <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#30206f] via-[#5137a7] to-[#7758df] p-6 text-white shadow-xl shadow-amber-200 sm:p-9">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold text-violet-100">
+              <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold text-amber-100">
                 ✧ YOUR NEXT STEP
               </span>
               <h2 className="mt-5 text-2xl font-extrabold leading-tight sm:text-3xl">
                 Small lessons.
                 <br />
-                <span className="text-violet-200">Meaningful progress.</span>
+                <span className="text-amber-200">Meaningful progress.</span>
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-violet-100">
+              <p className="mt-3 max-w-xl text-sm leading-7 text-amber-100">
                 Pick up where you left off, revise a difficult concept, or
                 use your study materials to explore something new.
               </p>
@@ -289,7 +329,7 @@ export default function LearningPage() {
 
             <Link
               href="/documents"
-              className="inline-flex items-center justify-center gap-3 rounded-xl bg-white px-5 py-4 text-sm font-extrabold text-violet-800 transition hover:bg-violet-50"
+              className="inline-flex items-center justify-center gap-3 rounded-xl bg-white px-5 py-4 text-sm font-extrabold text-amber-800 transition hover:bg-amber-50"
             >
               Open study workspace <span>→</span>
             </Link>
@@ -314,14 +354,14 @@ export default function LearningPage() {
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search courses..."
                 aria-label="Search courses"
-                className="min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-violet-400 focus:ring-4 focus:ring-violet-100 sm:w-56"
+                className="min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 sm:w-56"
               />
 
               <select
                 value={filter}
                 onChange={(event) => setFilter(event.target.value)}
                 aria-label="Filter courses"
-                className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
               >
                 <option>All</option>
                 <option>In Progress</option>
@@ -342,7 +382,7 @@ export default function LearningPage() {
                   setSearch("");
                   setFilter("All");
                 }}
-                className="mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-bold text-white hover:bg-violet-700"
+                className="mt-4 rounded-xl bg-amber-600 px-4 py-2 text-sm font-bold text-white hover:bg-amber-700"
               >
                 Clear filters
               </button>
@@ -352,13 +392,13 @@ export default function LearningPage() {
               {filteredCourses.map((course) => (
                 <article
                   key={course.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:shadow-lg sm:p-6"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-lg sm:p-6"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div
                       className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-2xl ${
-                        course.color === "violet"
-                          ? "bg-violet-50"
+                        course.color === "amber"
+                          ? "bg-amber-50"
                           : course.color === "blue"
                             ? "bg-blue-50"
                             : "bg-emerald-50"
@@ -371,7 +411,7 @@ export default function LearningPage() {
                     </span>
                   </div>
 
-                  <p className="mt-5 text-xs font-bold uppercase tracking-wider text-violet-600">
+                  <p className="mt-5 text-xs font-bold uppercase tracking-wider text-amber-600">
                     {course.category}
                   </p>
                   <h3 className="mt-2 text-xl font-extrabold">
@@ -385,7 +425,7 @@ export default function LearningPage() {
                     <span className="font-semibold text-slate-700">
                       Your progress
                     </span>
-                    <span className="font-extrabold text-violet-700">
+                    <span className="font-extrabold text-amber-700">
                       {course.progress}%
                     </span>
                   </div>
@@ -400,8 +440,8 @@ export default function LearningPage() {
                   >
                     <div
                       className={`h-full rounded-full transition-all ${
-                        course.color === "violet"
-                          ? "bg-violet-600"
+                        course.color === "amber"
+                          ? "bg-amber-600"
                           : course.color === "blue"
                             ? "bg-blue-600"
                             : "bg-emerald-500"
@@ -421,7 +461,7 @@ export default function LearningPage() {
                         `${course.title}: course overview selected. Connect your lesson content or backend to open the actual lessons.`
                       )
                     }
-                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-violet-700"
+                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-amber-700"
                   >
                     {course.progress === 100
                       ? "Review course"
@@ -437,7 +477,7 @@ export default function LearningPage() {
         <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
           <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-widest text-violet-600">
+              <p className="text-xs font-extrabold uppercase tracking-widest text-amber-600">
                 Make your next session count
               </p>
               <h2 className="mt-2 text-xl font-extrabold">
@@ -450,7 +490,7 @@ export default function LearningPage() {
             </div>
             <Link
               href="/documents"
-              className="inline-flex items-center justify-center rounded-xl border border-violet-200 bg-violet-50 px-5 py-3 text-sm font-bold text-violet-700 hover:bg-violet-100"
+              className="inline-flex items-center justify-center rounded-xl border border-amber-200 bg-amber-50 px-5 py-3 text-sm font-bold text-amber-700 hover:bg-amber-100"
             >
               Open My Documents →
             </Link>
