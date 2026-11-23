@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://learnweaveai.onrender.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://learnweave-ai.onrender.com";
 
 export default function SignUpPage() {
   const router = useRouter();

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://learnweave-ai.onrender.com";
 type Question = { question: string; options: string[]; answer: string; explanation: string };
 const interests = ["Machine Learning", "Python", "Data Science", "Web Development", "Mathematics", "Biology"];
 
