@@ -1,8 +1,11 @@
 import os
+import logging
 from app.password_reset_model import PasswordResetOTP
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
 
 from app.database import Base, engine
 from app import models
@@ -17,13 +20,23 @@ app = FastAPI(
     ),
     version="1.0.0",
 )
+logger = logging.getLogger("uvicorn.error.learnweave")
 
 
 @app.on_event("startup")
 def create_database_tables():
-    print("Registered tables:", list(Base.metadata.tables.keys()))
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created or verified.")
+    logger.info("Registered tables: %s", list(Base.metadata.tables.keys()))
+    try:
+        Base.metadata.create_all(bind=engine)
+    except OperationalError:
+        # Keep the HTTP service alive so Render can bind its port and expose
+        # diagnostics while the database URL or database availability is fixed.
+        logger.exception(
+            "Database initialization failed. Verify DATABASE_URL uses the "
+            "database's internal URL and that both Render services share a region."
+        )
+        return
+    logger.info("Database tables created or verified.")
 
 # CORS configuration. Extra origins (for example a Vercel preview URL)
 # can be added with a comma-separated CORS_ALLOW_ORIGINS variable.
@@ -68,7 +81,15 @@ def root():
 
 @app.get("/health")
 def health_check():
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        database_status = "connected"
+    except OperationalError:
+        database_status = "unavailable"
+
     return {
-        "status": "healthy",
-        "application": "LearnWeave AI"
+        "status": "healthy" if database_status == "connected" else "degraded",
+        "application": "LearnWeave AI",
+        "database": database_status,
     }
