@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export default function TutorPage() {
   return (
-    <main className="min-h-screen bg-[#f7f8fc] text-slate-800">
+    <main className="min-h-screen bg-[#f2f7f1] text-slate-800">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
 
         <div className="mb-8">
-          <p className="text-sm font-medium text-violet-600">
+          <p className="text-sm font-medium text-emerald-600">
             AI TUTOR
           </p>
 
@@ -20,7 +20,7 @@ export default function TutorPage() {
           </p>
         </div>
 
-        <section className="rounded-3xl bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-600 p-7 text-white shadow-lg sm:p-10">
+        <section className="rounded-3xl bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 p-7 text-white shadow-lg sm:p-10">
 
           <div className="max-w-2xl">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 text-2xl">
@@ -31,7 +31,7 @@ export default function TutorPage() {
               Learn with your own study material
             </h2>
 
-            <p className="mt-4 text-sm leading-6 text-indigo-100 sm:text-base">
+            <p className="mt-4 text-sm leading-6 text-teal-100 sm:text-base">
               LearnWeave AI uses your uploaded learning resources to retrieve
               relevant information and generate grounded answers.
             </p>
@@ -60,7 +60,7 @@ export default function TutorPage() {
         <div className="mt-8 grid gap-6 md:grid-cols-3">
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 text-teal-600">
               ?
             </div>
 
@@ -75,7 +75,7 @@ export default function TutorPage() {
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
               AI
             </div>
 
@@ -119,7 +119,7 @@ export default function TutorPage() {
 
           <Link
             href="/"
-            className="mt-5 inline-flex rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
+            className="mt-5 inline-flex rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
           >
             Open Study Assistant →
           </Link>
@@ -129,7 +129,7 @@ export default function TutorPage() {
         <div className="mt-8">
           <Link
             href="/"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            className="text-sm font-medium text-teal-600 hover:text-teal-700"
           >
             ← Back to Dashboard
           </Link>

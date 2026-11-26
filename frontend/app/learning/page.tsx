@@ -138,7 +138,7 @@ export default function LearningPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8f7fc] text-slate-800">
+    <div className="min-h-screen bg-[#f2f7f1] text-slate-800">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-5 px-4 sm:px-6 lg:px-10">
           <Link href="/" className="flex shrink-0 items-center gap-3">
@@ -296,7 +296,7 @@ export default function LearningPage() {
               <span className="text-sm font-medium text-slate-500">
                 Average progress
               </span>
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-xl">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-lime-50 text-xl">
                 📈
               </span>
             </div>
@@ -310,7 +310,7 @@ export default function LearningPage() {
           </div>
         </section>
 
-        <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#30206f] via-[#5137a7] to-[#7758df] p-6 text-white shadow-xl shadow-amber-200 sm:p-9">
+        <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#14241b] via-[#0c1712] to-[#111a12] p-6 text-white shadow-xl shadow-amber-200 sm:p-9">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
             <div>
               <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold text-amber-100">
@@ -400,7 +400,7 @@ export default function LearningPage() {
                         course.color === "amber"
                           ? "bg-amber-50"
                           : course.color === "blue"
-                            ? "bg-blue-50"
+                            ? "bg-lime-50"
                             : "bg-emerald-50"
                       }`}
                     >
@@ -443,7 +443,7 @@ export default function LearningPage() {
                         course.color === "amber"
                           ? "bg-amber-600"
                           : course.color === "blue"
-                            ? "bg-blue-600"
+                            ? "bg-lime-600"
                             : "bg-emerald-500"
                       }`}
                       style={{ width: `${course.progress}%` }}

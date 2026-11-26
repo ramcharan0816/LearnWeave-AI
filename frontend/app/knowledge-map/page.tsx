@@ -30,11 +30,11 @@ const topics = [
 
 export default function KnowledgeMapPage() {
   return (
-    <main className="min-h-screen bg-[#f7f8fc] text-slate-800">
+    <main className="min-h-screen bg-[#f2f7f1] text-slate-800">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
 
         <div className="mb-8">
-          <p className="text-sm font-medium text-indigo-600">
+          <p className="text-sm font-medium text-teal-600">
             KNOWLEDGE MAP
           </p>
 
@@ -61,7 +61,7 @@ export default function KnowledgeMapPage() {
               </p>
             </div>
 
-            <div className="rounded-xl bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700">
+            <div className="rounded-xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">
               Overall mastery · 54%
             </div>
           </div>
@@ -89,7 +89,7 @@ export default function KnowledgeMapPage() {
 
                 <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                   <div
-                    className="h-full rounded-full bg-indigo-600 transition-all"
+                    className="h-full rounded-full bg-teal-600 transition-all"
                     style={{ width: `${topic.progress}%` }}
                   />
                 </div>
@@ -168,9 +168,9 @@ export default function KnowledgeMapPage() {
               <p className="mt-1 font-semibold">→</p>
             </div>
 
-            <div className="rounded-xl bg-indigo-50 p-4 text-center">
-              <p className="text-xs text-indigo-500">Mastery</p>
-              <p className="mt-1 font-semibold text-indigo-700">AI Map</p>
+            <div className="rounded-xl bg-teal-50 p-4 text-center">
+              <p className="text-xs text-teal-500">Mastery</p>
+              <p className="mt-1 font-semibold text-teal-700">AI Map</p>
             </div>
 
           </div>
@@ -180,7 +180,7 @@ export default function KnowledgeMapPage() {
         <div className="mt-8">
           <Link
             href="/"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            className="text-sm font-medium text-teal-600 hover:text-teal-700"
           >
             ← Back to Study Assistant
           </Link>

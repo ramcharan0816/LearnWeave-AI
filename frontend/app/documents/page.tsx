@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -129,12 +129,12 @@ export default function DocumentsPage() {
       <div className="flex min-h-screen">
         <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white p-5 md:flex">
           <Link href="/" className="mb-9 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-xl font-bold text-white shadow-lg">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 text-xl font-bold text-white shadow-lg">
               L
             </div>
             <div>
               <h1 className="text-lg font-bold tracking-tight">
-                LearnWeave <span className="text-violet-600">AI</span>
+                LearnWeave <span className="text-emerald-600">AI</span>
               </h1>
               <p className="text-xs text-slate-500">
                 YOUR PERSONAL LEARNING SPACE
@@ -158,8 +158,8 @@ export default function DocumentsPage() {
                   onClick={() => setMobileMenu(false)}
                   className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
                     active
-                      ? "bg-violet-50 text-violet-700"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-violet-700"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-emerald-700"
                   }`}
                 >
                   <span className="flex h-6 w-6 items-center justify-center text-lg">
@@ -171,8 +171,8 @@ export default function DocumentsPage() {
             })}
           </nav>
 
-          <div className="mt-auto rounded-2xl bg-violet-50 p-4">
-            <div className="mb-2 text-sm font-semibold text-violet-900">
+          <div className="mt-auto rounded-2xl bg-emerald-50 p-4">
+            <div className="mb-2 text-sm font-semibold text-emerald-900">
               Your AI study space
             </div>
             <p className="text-xs leading-5 text-slate-600">
@@ -188,7 +188,7 @@ export default function DocumentsPage() {
               <Link
                 href="/"
                 aria-label="Go to dashboard"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-600 font-bold text-white md:hidden"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 font-bold text-white md:hidden"
               >
                 L
               </Link>
@@ -203,7 +203,7 @@ export default function DocumentsPage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="hidden rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-violet-200 hover:bg-violet-50 sm:inline-flex"
+                className="hidden rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50 sm:inline-flex"
               >
                 ← Dashboard
               </Link>
@@ -233,7 +233,7 @@ export default function DocumentsPage() {
                     onClick={() => setMobileMenu(false)}
                     className={`rounded-xl px-3 py-3 text-sm font-medium ${
                       item.href === "/documents"
-                        ? "bg-violet-50 text-violet-700"
+                        ? "bg-emerald-50 text-emerald-700"
                         : "text-slate-600 hover:bg-slate-50"
                     }`}
                   >
@@ -248,14 +248,14 @@ export default function DocumentsPage() {
           )}
 
           <div className="mx-auto max-w-6xl px-4 py-7 sm:px-8 sm:py-9">
-            <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-r from-violet-700 via-indigo-600 to-blue-600 p-6 text-white shadow-lg shadow-indigo-100 sm:p-10">
-              <p className="mb-3 text-xs font-semibold tracking-widest text-indigo-100">
+            <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-700 via-teal-600 to-lime-600 p-6 text-white shadow-lg shadow-teal-100 sm:p-10">
+              <p className="mb-3 text-xs font-semibold tracking-widest text-teal-100">
                 YOUR PERSONALIZED LEARNING SPACE
               </p>
               <h2 className="max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">
                 Turn your study materials into understanding.
               </h2>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-indigo-100 sm:text-base">
+              <p className="mt-4 max-w-xl text-sm leading-6 text-teal-100 sm:text-base">
                 Upload your notes, ask questions, and explore answers
                 grounded in your learning resources.
               </p>
@@ -281,16 +281,16 @@ export default function DocumentsPage() {
                       Upload a PDF to your study space.
                     </p>
                   </div>
-                  <div className="rounded-xl bg-violet-50 p-3 text-xl text-violet-700">
+                  <div className="rounded-xl bg-emerald-50 p-3 text-xl text-emerald-700">
                     ▤
                   </div>
                 </div>
 
                 <label
                   htmlFor="pdf-upload"
-                  className="flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-7 text-center transition hover:border-violet-400 hover:bg-violet-50/50"
+                  className="flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-7 text-center transition hover:border-emerald-400 hover:bg-emerald-50/50"
                 >
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl text-violet-600 shadow-sm">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl text-emerald-600 shadow-sm">
                     ↑
                   </div>
                   <span className="text-sm font-semibold">
@@ -346,7 +346,7 @@ export default function DocumentsPage() {
                   type="button"
                   onClick={uploadDocument}
                   disabled={!file || uploading}
-                  className="mt-4 w-full rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                  className="mt-4 w-full rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
                 >
                   {uploading ? "Uploading..." : "Upload document"}
                 </button>
@@ -386,7 +386,7 @@ export default function DocumentsPage() {
                       Ask a question about your learning material.
                     </p>
                   </div>
-                  <div className="rounded-xl bg-violet-50 p-3 text-xl text-violet-700">
+                  <div className="rounded-xl bg-emerald-50 p-3 text-xl text-emerald-700">
                     ✧
                   </div>
                 </div>
@@ -394,7 +394,7 @@ export default function DocumentsPage() {
                 <div className="flex flex-1 flex-col rounded-2xl bg-slate-50 p-4">
                   {!answer && !asking && (
                     <div className="m-auto max-w-xs py-8 text-center">
-                      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl text-violet-600 shadow-sm">
+                      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl text-emerald-600 shadow-sm">
                         ✧
                       </div>
                       <h4 className="font-semibold">
@@ -409,7 +409,7 @@ export default function DocumentsPage() {
 
                   {asking && (
                     <div className="m-auto py-8 text-center">
-                      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-violet-100 border-t-violet-600" />
+                      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-emerald-100 border-t-emerald-600" />
                       <p className="text-sm font-medium text-slate-600">
                         Finding information and generating your answer...
                       </p>
@@ -419,7 +419,7 @@ export default function DocumentsPage() {
                   {answer && !asking && (
                     <div className="space-y-4">
                       <div className="rounded-xl bg-white p-4 shadow-sm">
-                        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-violet-600">
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-600">
                           AI answer
                         </p>
                         <p className="whitespace-pre-wrap text-sm leading-7 text-slate-700">
@@ -468,7 +468,7 @@ export default function DocumentsPage() {
                   <label htmlFor="question" className="sr-only">
                     Ask a question
                   </label>
-                  <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-white p-2 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100">
+                  <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-white p-2 focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-100">
                     <textarea
                       id="question"
                       value={question}
@@ -489,7 +489,7 @@ export default function DocumentsPage() {
                     <button
                       type="submit"
                       disabled={!question.trim() || asking}
-                      className="rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                      className="rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
                     >
                       {asking ? "..." : "Ask →"}
                     </button>
@@ -520,4 +520,3 @@ export default function DocumentsPage() {
     </div>
   );
 }
-

@@ -61,7 +61,7 @@ export default function AssessmentsPage() {
 
   function reset() { setQuestions([]); setFinished(false); setCurrent(0); setScore(0); setError(""); }
 
-  return <main className="min-h-screen bg-[#fbf8f1] text-slate-800">
+  return <main className="min-h-screen bg-[#f2f7f1] text-slate-800">
     <div className="mx-auto max-w-4xl px-5 py-12 sm:px-8">
       <Link href="/learning" className="text-sm font-semibold text-amber-800 hover:text-amber-950">← Back to your learning</Link>
       <p className="mt-10 text-xs font-bold uppercase tracking-[0.2em] text-amber-800">Practice studio</p>

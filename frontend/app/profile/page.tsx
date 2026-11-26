@@ -106,9 +106,9 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f5ff]">
+      <main className="flex min-h-screen items-center justify-center bg-[#f2f7f1]">
         <div className="text-center">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-violet-200 border-t-violet-700" />
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-700" />
           <p className="mt-4 text-sm text-gray-600">
             Loading your profile...
           </p>
@@ -119,7 +119,7 @@ export default function ProfilePage() {
 
   if (error || !student) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f7f5ff] px-5">
+      <main className="flex min-h-screen items-center justify-center bg-[#f2f7f1] px-5">
         <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-lg">
           <div className="text-4xl">⚠️</div>
           <h1 className="mt-4 text-xl font-bold text-gray-900">
@@ -130,7 +130,7 @@ export default function ProfilePage() {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-xl bg-violet-700 px-5 py-3 font-semibold text-white hover:bg-violet-800"
+            className="mt-6 rounded-xl bg-emerald-700 px-5 py-3 font-semibold text-white hover:bg-emerald-800"
           >
             Try again
           </button>
@@ -146,27 +146,27 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f5ff] text-gray-900">
-      <header className="sticky top-0 z-10 border-b border-violet-100 bg-white/90 backdrop-blur">
+    <main className="min-h-screen bg-[#f2f7f1] text-gray-900">
+      <header className="sticky top-0 z-10 border-b border-emerald-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
           <Link href="/" className="text-xl font-extrabold tracking-tight">
-            LearnWeave <span className="text-violet-700">AI</span>
+            LearnWeave <span className="text-emerald-700">AI</span>
           </Link>
 
           <nav className="hidden items-center gap-6 text-sm font-medium text-gray-600 md:flex">
-            <Link href="/" className="hover:text-violet-700">
+            <Link href="/" className="hover:text-emerald-700">
               Dashboard
             </Link>
-            <Link href="/learning" className="hover:text-violet-700">
+            <Link href="/learning" className="hover:text-emerald-700">
               My Learning
             </Link>
-            <Link href="/tutor" className="hover:text-violet-700">
+            <Link href="/tutor" className="hover:text-emerald-700">
               AI Tutor
             </Link>
-            <Link href="/knowledge-map" className="hover:text-violet-700">
+            <Link href="/knowledge-map" className="hover:text-emerald-700">
               Knowledge Map
             </Link>
-            <Link href="/assessments" className="hover:text-violet-700">
+            <Link href="/assessments" className="hover:text-emerald-700">
               Assessments
             </Link>
           </nav>
@@ -182,7 +182,7 @@ export default function ProfilePage() {
 
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12">
         <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-600">
             Account settings
           </p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -194,11 +194,11 @@ export default function ProfilePage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.6fr]">
-          <section className="overflow-hidden rounded-3xl border border-violet-100 bg-white shadow-sm">
-            <div className="h-28 bg-gradient-to-r from-violet-700 via-purple-600 to-indigo-700" />
+          <section className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-sm">
+            <div className="h-28 bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-700" />
 
             <div className="px-6 pb-7">
-              <div className="-mt-12 flex h-24 w-24 items-center justify-center rounded-3xl border-4 border-white bg-violet-100 text-3xl font-extrabold text-violet-800 shadow-sm">
+              <div className="-mt-12 flex h-24 w-24 items-center justify-center rounded-3xl border-4 border-white bg-emerald-100 text-3xl font-extrabold text-emerald-800 shadow-sm">
                 {initials}
               </div>
 
@@ -233,7 +233,7 @@ export default function ProfilePage() {
           </section>
 
           <div className="space-y-6">
-            <section className="rounded-3xl border border-violet-100 bg-white p-6 shadow-sm sm:p-8">
+            <section className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm sm:p-8">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-xl font-bold">Personal information</h2>
@@ -241,7 +241,7 @@ export default function ProfilePage() {
                     Your registered account details.
                   </p>
                 </div>
-                <div className="rounded-xl bg-violet-50 p-3 text-xl">
+                <div className="rounded-xl bg-emerald-50 p-3 text-xl">
                   👤
                 </div>
               </div>
@@ -281,7 +281,7 @@ export default function ProfilePage() {
               </div>
             </section>
 
-            <section className="rounded-3xl border border-violet-100 bg-white p-6 shadow-sm sm:p-8">
+            <section className="rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm sm:p-8">
               <h2 className="text-xl font-bold">Your learning space</h2>
               <p className="mt-2 text-sm leading-6 text-gray-500">
                 Continue learning with your personalized study tools.
@@ -290,7 +290,7 @@ export default function ProfilePage() {
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <Link
                   href="/learning"
-                  className="rounded-2xl border border-violet-100 p-4 transition hover:border-violet-300 hover:bg-violet-50"
+                  className="rounded-2xl border border-emerald-100 p-4 transition hover:border-emerald-300 hover:bg-emerald-50"
                 >
                   <span className="text-2xl">📚</span>
                   <p className="mt-3 font-bold">My Learning</p>
@@ -301,7 +301,7 @@ export default function ProfilePage() {
 
                 <Link
                   href="/tutor"
-                  className="rounded-2xl border border-violet-100 p-4 transition hover:border-violet-300 hover:bg-violet-50"
+                  className="rounded-2xl border border-emerald-100 p-4 transition hover:border-emerald-300 hover:bg-emerald-50"
                 >
                   <span className="text-2xl">✨</span>
                   <p className="mt-3 font-bold">AI Tutor</p>
@@ -312,7 +312,7 @@ export default function ProfilePage() {
 
                 <Link
                   href="/knowledge-map"
-                  className="rounded-2xl border border-violet-100 p-4 transition hover:border-violet-300 hover:bg-violet-50"
+                  className="rounded-2xl border border-emerald-100 p-4 transition hover:border-emerald-300 hover:bg-emerald-50"
                 >
                   <span className="text-2xl">🧠</span>
                   <p className="mt-3 font-bold">Knowledge Map</p>
@@ -323,7 +323,7 @@ export default function ProfilePage() {
 
                 <Link
                   href="/assessments"
-                  className="rounded-2xl border border-violet-100 p-4 transition hover:border-violet-300 hover:bg-violet-50"
+                  className="rounded-2xl border border-emerald-100 p-4 transition hover:border-emerald-300 hover:bg-emerald-50"
                 >
                   <span className="text-2xl">🎯</span>
                   <p className="mt-3 font-bold">Assessments</p>
